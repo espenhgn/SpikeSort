@@ -66,7 +66,7 @@ def test_diamond_dependency():
     out = DummyTwoWay()
     data = out.get_data()
     base.features['Data'].update()
-    print out.data
+    print(out.data)
     ok_(out.data == 1)
 
 

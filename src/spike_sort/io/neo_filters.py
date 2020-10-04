@@ -7,7 +7,7 @@ from spike_beans.components import GenericSource
 try:
     import neo
 except ImportError:
-    raise ImportError, "To use the extra data filters you have to install Neo package"
+    raise ImportError("To use the extra data filters you have to install Neo package")
 import numpy as np
 import os
 
@@ -40,9 +40,9 @@ class AxonFilter(object):
         return {"data": sp_raw, "FS": FS, "n_contacts": n_contacts}
     
     def write_sp(self):
-        raise NotImplementedError, "Writing to Axon files not yet implemented"
+        raise NotImplementedError("Writing to Axon files not yet implemented")
     def write_spt(self, spt_dict, dataset, overwrite=False):
-        raise NotImplementedError, "Writing spikes in Axon format not yet implemented"
+        raise NotImplementedError("Writing spikes in Axon format not yet implemented")
 
 class NeoSource(components.GenericSource):
     def __init__(self, fname, electrodes=None, overwrite=False):
@@ -53,7 +53,7 @@ class NeoSource(components.GenericSource):
         if ext == '.abf':
             self.io_filter = AxonFilter(fname, electrodes)
         else:
-            raise IOError, "Format {0} not recognised".format(ext)
+            raise IOError("Format {0} not recognised".format(ext))
         self.read_sp = self.io_filter.read_sp
         self.write_sp = self.io_filter.write_sp
         self.write_spt = self.io_filter.write_spt

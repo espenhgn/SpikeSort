@@ -91,7 +91,7 @@ def dip(data):
         DIP statistic. If the input data is flat, returns float
     """
     if not _diptst:
-        raise NotImplemented, "module unavailable"
+        raise NotImplemented("module unavailable")
     sdata = np.sort(data)
     return _diptst.diptst1(sdata)[0]
 

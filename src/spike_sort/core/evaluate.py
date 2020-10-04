@@ -2,8 +2,8 @@
 #coding=utf-8
 
 import numpy as np
-import extract
-import cluster
+from . import extract
+from . import cluster
 import warnings
 
 

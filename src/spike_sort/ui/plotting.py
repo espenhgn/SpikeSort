@@ -11,7 +11,7 @@ from matplotlib.pyplot import show, figure, close
 import spike_sort
 cmap = plt.cm.jet
 
-import _mpl_helpers # performance boosters
+from . import _mpl_helpers # performance boosters
 
 
 def label_color(labels):

@@ -6,7 +6,7 @@ Created on Feb 9, 2011
 
 import spike_sort as sort
 
-import base
+from . import base
 from spike_sort.io.filters import BakerlabFilter, PyTablesFilter
 from spike_sort import features, filters
 from spike_sort.ui import plotting
@@ -197,7 +197,7 @@ class FeatureExtractor(base.Component):
         func_name = "fet" + name
         _func = features.__getattribute__(func_name)
         func = lambda x: _func(x, *args, **kwargs)
-        name = features._add_method_suffix(name, self.feature_methods.keys())
+        name = features._add_method_suffix(name, list(self.feature_methods.keys()))
 
         self.feature_methods[name] = func
 
@@ -216,7 +216,7 @@ class FeatureExtractor(base.Component):
         pattern : string
             search pattern
         """
-        if not isinstance(pattern, basestring):
+        if not isinstance(pattern, str):
             raise TypeError("Wrong pattern type: %s. Must be string"
                     % type(pattern))
 
@@ -253,10 +253,10 @@ class FeatureExtractor(base.Component):
 
     def _calc_features(self):
         spikes = self.spikes_src.spikes
-        feats = [f(spikes) for f in self.feature_methods.values()]
+        feats = [f(spikes) for f in list(self.feature_methods.values())]
         ft_data = features.combine(feats,
                 norm=self.normalize,
-                feat_method_names = self.feature_methods.keys())
+                feat_method_names = list(self.feature_methods.keys()))
         
         # Filter feature_data to remove _hidden_features.
         # This routine is O(n^2), to deal woth possible repetitions
@@ -682,12 +682,12 @@ class ExportCells(base.Component):
             md = metadata
 
         if mapping is None:
-            for cell_id, spt in spt_clust.items():
+            for cell_id, spt in list(spt_clust.items()):
                 if md and cell_id != 0:
                     spt['metadata'] = md
                 export_events['cell{0}'.format(cell_id)] = spt
         else:
-            for clust_id, cell_id in mapping.items():
+            for clust_id, cell_id in list(mapping.items()):
                 spt = spt_clust[clust_id]
                 if md and cell_id != 0:
                     spt['metadata'] = md
@@ -730,13 +730,13 @@ class Dashboard(MplPlotComponent):
 
         spt_all = sort.cluster.split_cells(spike_idx, labels)
 
-        if self.cell not in spt_all.keys():
+        if self.cell not in list(spt_all.keys()):
             old_cell = self.cell
             for c in range(max(self.labels_src.labels) + 1)[::-1]:
                 if c in spt_all:
                     self.cell = c
-                    print("Dashboard: cell %s doesn't exist, plotting cell %s"
-                          % (old_cell, self.cell))
+                    print(("Dashboard: cell %s doesn't exist, plotting cell %s"
+                          % (old_cell, self.cell)))
                     break
 
         dataset = {'spt': spt_all[self.cell]['data'],

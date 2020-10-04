@@ -3,10 +3,10 @@
 
 import numpy as np
 from scipy import stats
-import basic
+from . import basic
 
 import matplotlib.pyplot as plt
-from io_tools import read_dataset
+from .io_tools import read_dataset
 
 def plot_psth(ax, dataset, **kwargs):
     spt = dataset['spt']

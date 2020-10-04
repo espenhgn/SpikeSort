@@ -15,6 +15,7 @@ Each of the function returns a (mapping) object with following keys:
 
 import numpy as np
 import re
+from functools import reduce
 try:
     import pywt as wt
 except ImportError:
@@ -272,7 +273,7 @@ def WT(data, wavelet, mode='sym'):
         max_level = wt.dwt_max_level(datalen, filtlen)
         total_len = 0
 
-        for i in xrange(max_level):
+        for i in range(max_level):
             datalen = wt.dwt_coeff_len(datalen, filtlen, mode)
             total_len += datalen
 
@@ -287,8 +288,8 @@ def WT(data, wavelet, mode='sym'):
     n_features = full_coeff_len(n_samples, wavelet.dec_len, mode)
     new_data = np.empty((n_features, n_spikes, n_contacts))
 
-    for i in xrange(n_spikes):
-        for c in xrange(n_contacts):
+    for i in range(n_spikes):
+        for c in range(n_contacts):
             coeffs = wt.wavedec(data[:, i, c], wavelet, mode)
             new_data[:, i, c] = np.hstack(coeffs)
 
@@ -401,13 +402,13 @@ def fetWT(spikes_data, nfeatures=3, contacts='all', wavelet='haar',
     features = np.empty((nfeatures, coeffs.shape[1], n_channels))
 
     # name
-    if isinstance(wavelet, basestring):
+    if isinstance(wavelet, str):
         feature_name = wavelet
     else:
         feature_name = wavelet.name
     feature_name = "%sWC" % feature_name
 
-    for contact in xrange(n_channels):
+    for contact in range(n_channels):
         data = coeffs[:, :, contact]
 
         # no selection
@@ -558,4 +559,4 @@ def register(feature_func):
     """feature function must take the spike data array and return a feature dictionary with at least two keys:
     data and names"""
 
-    globals()['fet' + feature_func.func_name] = add_mask(feature_func)
+    globals()['fet' + feature_func.__name__] = add_mask(feature_func)

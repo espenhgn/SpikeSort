@@ -185,7 +185,7 @@ class TestBakerlab(object):
         filter = BakerlabFilter(self.conf_file)
         sp = filter.read_sp(self.el_node)
         read_data = sp['data'][0, :]
-        print read_data.shape
+        print(read_data.shape)
         ok_((np.abs(read_data - self.data) <= 1 / 200.0).all())
 
     def test_sp_shape(self):
